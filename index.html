@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Echo Fade</title>
+
+  <style>
+    body {
+      background: black;
+      margin: 0;
+      overflow: hidden;
+      font-family: monospace;
+    }
+
+    #container {
+      padding: 40px;
+    }
+
+    .line {
+      font-size: 26px;
+      margin: 10px 0;
+      opacity: 0;
+      filter: blur(6px);
+      animation: fadeInOut 4s ease forwards;
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(10px);
+      }
+      20% {
+        opacity: 1;
+        filter: blur(0px);
+      }
+      80% {
+        opacity: 1;
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(-10px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+
+  <script>
+    const sentences = [
+      "don't forget who you are.",
+      "remember who you are.",
+      "you are still you.",
+      "never lose yourself.",
+      "stay true to yourself.",
+      "you are not lost."
+    ];
+
+    const colors = [
+      "#d580ff",
+      "#c77dff",
+      "#b266ff",
+      "#ff66cc",
+      "#ff4da6",
+      "#e60073"
+    ];
+
+    const container = document.getElementById("container");
+
+    setInterval(() => {
+      const line = document.createElement("div");
+      line.className = "line";
+
+      const text = sentences[Math.floor(Math.random() * sentences.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      line.innerText = text;
+      line.style.color = color;
+
+      // glow effect
+      line.style.textShadow = `
+        0 0 5px ${color},
+        0 0 10px ${color},
+        0 0 20px ${color}
+      `;
+
+      container.appendChild(line);
+
+      // remove after animation (keeps DOM clean)
+      setTimeout(() => {
+        line.remove();
+      }, 4000);
+
+    }, 300);
+  </script>
+</body>
+</html>

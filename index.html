@@ -16,20 +16,35 @@
     }
 
     .line {
-      font-size: 26px;
-      margin: 10px 0;
+      font-size: clamp(20px, 3vw, 30px);
+      margin: 14px 0;
       opacity: 0;
-      filter: blur(6px);
-      animation: fadeInOut 4s ease forwards;
+      filter: blur(8px);
+      animation: fadeInOut 7s ease forwards;
+      position: relative;
+      will-change: transform, opacity, filter;
+      transform: translateZ(0);
+      -webkit-text-stroke: 0.6px rgba(255,255,255,0.08);
+    }
+
+    /* Echo layer */
+    .line::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      opacity: 0.35;
+      filter: blur(10px);
+      z-index: -1;
     }
 
     @keyframes fadeInOut {
       0% {
         opacity: 0;
-        filter: blur(10px);
-        transform: translateY(10px);
+        filter: blur(12px);
+        transform: translateY(12px);
       }
-      20% {
+      15% {
         opacity: 1;
         filter: blur(0px);
       }
@@ -39,8 +54,15 @@
       }
       100% {
         opacity: 0;
-        filter: blur(10px);
-        transform: translateY(-10px);
+        filter: blur(12px);
+        transform: translateY(-12px);
+      }
+    }
+
+    /* Mobile glow boost */
+    @media (max-width: 768px) {
+      .line {
+        -webkit-text-stroke: 0.4px rgba(255,255,255,0.12);
       }
     }
   </style>
@@ -51,12 +73,23 @@
 
   <script>
     const sentences = [
-      "don't forget who you are.",
-      "remember who you are.",
-      "you are still you.",
-      "never lose yourself.",
-      "stay true to yourself.",
-      "you are not lost."
+      "Change is the end result of all true learning.",
+      "Knowing yourself is the beginning of all wisdom.",
+      "It is never too late to be what you might have been.",
+      "Change your thoughts and you change your world.",
+      "Slow down, you'll get there faster.",
+      "Nature does not hurry, yet everything is accomplished.",
+      "Never dull your shine for somebody else.",
+      "Life is not a problem to be solved, but a reality to be experienced.",
+      "The quieter you become, the more you are able to hear.",
+      "The end is just a beginning of something new.",
+      "Everything will be okay in the end. If it's not okay, it's not the end.",
+      "Trust yourself. You know more than you think you do.",
+      "Wanting to be someone else is a waste of the person you are.",
+      "You were born to be real, not to be perfect.",
+      "Why are you trying so hard to fit in when you were born to stand out?",
+      "It's hard to remember who you were when you're constantly pretending to be someone you're not.",
+      "You don't have to control your thoughts. You just have to stop letting them control you."
     ];
 
     const colors = [
@@ -70,7 +103,7 @@
 
     const container = document.getElementById("container");
 
-    setInterval(() => {
+    function spawnLine() {
       const line = document.createElement("div");
       line.className = "line";
 
@@ -78,23 +111,29 @@
       const color = colors[Math.floor(Math.random() * colors.length)];
 
       line.innerText = text;
+      line.dataset.text = text;
       line.style.color = color;
 
-      // glow effect
       line.style.textShadow = `
-        0 0 5px ${color},
-        0 0 10px ${color},
-        0 0 20px ${color}
+        0 0 6px ${color},
+        0 0 14px ${color},
+        0 0 28px ${color},
+        0 0 40px ${color}
+      `;
+
+      line.style.filter = `
+        drop-shadow(0 0 6px ${color})
+        drop-shadow(0 0 14px ${color})
       `;
 
       container.appendChild(line);
 
-      // remove after animation (keeps DOM clean)
       setTimeout(() => {
         line.remove();
-      }, 4000);
+      }, 7500);
+    }
 
-    }, 300);
+    setInterval(spawnLine, 900);
   </script>
 </body>
 </html>
